@@ -1,4 +1,11 @@
 
+NOTE:
+
+ This is a old code from a CVS repository, I think that it still should work , if I remember correcty it was able to handle the PGP/MIME
+encrypted mails, LDAP was a alpha feature that I think that was not used, but the encrypted list should work in any Linux/Unix with small changes
+
+
+
 $Id: readme,v 1.4 2006/11/21 18:09:53 paco Exp $
 
  PGP encrypted mail aliases
