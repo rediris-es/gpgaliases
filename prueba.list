@@ -1,0 +1,39 @@
+#
+# Ejemplo de fichero de configuración de un alias encriptado
+#
+# Sintaxis:
+# Hay cuatro tipos de lineas:
+# - Comentarios : Empiezan por #
+# - Lineas en blanco: "\n" , para dar legibilidad al texto
+# - asignaciones: variable = valor, definir alguno de los
+#   parametros de la lista.
+# - Claves PGP: Entradas en formato keyid:dirección de correo.
+#  donde keyid es un identificador, por ejemplo 0x0000000 
+# y la dirección es en formato rfc ej nombre@dominio.org
+#
+# Nota:
+#
+# Directorio donde se encuentran los anillos de claves GPG 
+pgpdir=/usr/local/etc/lists/prueba
+# Donde se encuentra el comando gpg
+gpg=/usr/bin/gpg
+#  Donde se encuentra el binario sendmail
+sendmail=/usr/sbin/sendmail
+
+# Localización del fichero de logs
+logfile=/var/log/services/prueba-list.txt
+#
+# onlymember indica si solamente los
+# miembros de la lista pueden enviar o no
+onlymember=1
+# Nombre de la lista 
+user=prueba
+# Dirección de la lista
+miaddr=prueba@rediris.es
+#
+# A que tipo de mensajes se debe enviar informacion al emisor
+replyon= badsignature, notencrypted, notmember, success
+replybasetemplate=/usr/local/etc/lists/prueba/reply
+#
+# Usuarios de la lista
+0xD3A42C61:francisco.monserrat@rediris.es

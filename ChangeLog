@@ -1,0 +1,26 @@
+
+ $Id: ChangeLog,v 1.1.1.1 2005/01/31 19:39:44 paco Exp $
+
+ $Log: ChangeLog,v $
+ Revision 1.1.1.1  2005/01/31 19:39:44  paco
+
+  Script for small encrypted mailing list alias with gpg
+
+
+ Revision 1.2  2004/11/25 17:08:02  paco
+
+ -  Modify gpg-aliases.pl to use tainted variables where possible
+
+ - Added option to reply with a message to the user then there is
+ some problem (message not encrypted, problem with the pgp key, etc).
+
+ - Minor changed in documentation to document that the PGP key of
+ the list must not be password protected.
+
+ Revision 1.1  2004/11/25 16:27:44  paco
+
+
+  Initial version of this file
+
+
+

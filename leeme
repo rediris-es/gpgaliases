@@ -1,0 +1,142 @@
+
+$Id: leeme,v 1.1.1.1 2005/01/31 19:39:44 paco Exp $
+
+ Alias de correo con encriptación PGP
+
+ Este pequeño programa permite tener listas de correo encriptadas con PGP/MIME,
+esta pensado para la configuración en listas de correo pequeñas en las que se 
+requiera que todos los mensajes (entrantes y salientes) vayan encriptados
+con PGP.
+
+ El script proporciona además las siguientes características "anti-spam":
+
+ - Solamente acepta mensajes de correo que vayan encriptados a la clave
+ PGP de la lista.
+ - Mediante una opción permite que solamente aquellos usuarios dados de alta
+en la lista puedan ser enviar mensajes a la lista, o que cualquier usuario
+que tenga la clave PGP pueda enviar mensajes a la lista.
+
+ Para funcionar la clave privada de la lista debe estar accesible sin password,
+por lo que el programa se debe instalar en un equipo de confianza.
+
+Configuración:
+
+ El script es lanzado desde el "/etc/aliases" y recibe un fichero de configuración
+como argumento, un ejemplo de configuración podría ser:
+
+
+
+ pruebas: 	"|/usr/local/bin/gpg-aliases.pl /usr/local/lists/mail-example.list"
+
+ El fichero de configuración es un fichero ASCII con cuatro tipos de lineas:
+
+ + Comentarios y retornos de carro (\n), Son ignorados.
+ + Opciones de configuración, separadas por "=", (variable, valor),
+se tienen que definir las siguientes variables:
+
+  - pgpdir: Directorio en la cual se almacenan las claves de la lista, configuración
+  de gnupg, para esta lista, etc.
+  - gpg : Ruta al binario gnupg
+  - sendmail: Ruta al binario sendmail empleado para enviar el mensaje
+  - logfile: Ruta donde se almacena el fichero de log de uso de la lista.
+  - onlymember: Si esta activado (1) solamente los miembros de la lista podrán
+  enviar mensajes, sino cualquier usuario que envíe un correo encriptado a la
+ clave de la lista podrá distribuir el mensaje.
+  - user:; Userid o keyid de la lista.
+  - miaddr: Dirección de correo de la lista.
+
+  - replyon: Indica cuando la lista debe responder al emisor de un 
+mensaje. Los valores aceptados son notencrypted , onlymember badsignature
+y success indicando que la lista debe responder al correo cuando:
+
+  +notencrypted: El mensaje no iba encriptado a la clave PGP de la lista
+  +onlymember: Solamente los miembros de la lista pueden enviar mensajes
+  +badsignature: La firma del mensaje no es valida.
+  +success : El mensaje se ha distribuido con exito.
+ 
+  -replybasetemplate: Base de la ruta donde se encuentran los ficheros empleado
+para responder a los mensajes , el nombre del fichero se crea concatenando este
+valor con el sufijo "NOTENCRYPTED", "BADSIGNATURE" , "ONLYMEMBER, "SUCCESS".
+
+  Por ejemplo si se configura la lista para responder a mensajes no
+encriptados y se indica:
+ replyon= "notencrypted"
+ replybasetemplate="/usr/local/lists/pruebas/reply"
+
+  Se empleara el fichero /usr/local/lists/pruebas/reply.NONENCRYPTED como
+template a la hora de enviar respuesta a los mensajes que lleguen a la lista
+no encriptados. Dentro del template se pueden emplear los siguientes valores:
+
+  - #TO : Quien envío el mensaje (FROM del mensaje original)
+  - #SUBJECT: Asunto del mensaje
+  - #FROM: Dirección de la lista 
+
+	
+  - list of members of the list, keyid & email address to send the mail to,
+separated by a semicolon ":" , you must add manually the keys to the public
+ring.
+
+
+
+
+
+ + Miembros de la lista: Relación de keyid y direcciones de correo correspondientes,
+a las que distribuir los mensajes de correo, separados por ":" , deben ser añadidos
+manualmente a la lista , así como incluir sus claves Gpg en el anillo de claves
+publicas de esta.
+
+
+ Pasos:
+
+1. Crear un directorio donde almacenar las claves PGP (variable pgpdir en el
+fichero de configuración, por ejemplo: /usr/local/etc/lists/mail-example
+
+2. Generar una clave gpg para la lista empleando la opción --homedir
+en gnupg para indicar donde se almacenaran los anillos de claves.
+
+ gpg --homedir /usr/local/etc/lists/mail-example --gen-key 
+
+
+3. Añadir las claves públicas de los miembros de la lista al anillo, de nuevo
+con la opción --homedir
+
+  gpg --homedir /usr/local/etc/lists/mail-example --keyserver your.favorite.keyserver --search-key user1  
+
+4. Modificar el fichero configuración.example para adaptarlo a las necesidades y
+añadir los usuarios de la lista , por ejemplo como  /usr/local/etc/lists 
+
+5. cambiar el uid de los ficheros en el directorio pgpdir para que el
+usuario y grupo con el que corren los scripts lanzados desde /etc/aliases
+puedan funcionar (en muchas distribuciones no es root)
+
+6. Modifica /etc/aliases para lanzar el script:
+
+ mail-example: |/usr/local/bin/mail-gpg /usr/local/etc/lists/mail-example.list
+(y hace un newaliases para actualizarlo)
+
+7. exportar la clave publica de la lista:
+   gpg --homedir /usr/local/etc/lists/mail-example --export -a miaddr > file
+ 
+ y distribuirla a los usuarios de la lista
+
+8. Probarla enviando un correo a la lista.
+
+
+ Notas:
+
+1. Como se ha comentado antes, la verificación de los usuarios a la lista se hace en
+base a la clave PGP y no a la dirección de correo.
+
+2. El correo es enviado a las direcciones de correo indicadas en el fichero
+de configuración, encriptadas con el keyid que se indica, no hay verificación de que
+que la clave publica contenga esta dirección de correo o no.
+
+3. Los anillos de claves pueden ser compartidos por varias listas en el servidor,
+pero es mejor mantener un directorio y anillo diferente para cada lista.
+
+4. La velocidad en un PIII a 800z no muy cargado con Linux es de unos 5segundos
+para el envío de un mensaje a un usuario de la lista.
+
+5. El script no modifica los tipos mime de la lista,  ni incluye ninguna información
+sobre el emisor de la lista.
+

@@ -1,0 +1,52 @@
+#
+# Sample configuration file for mail-gp.pl
+#
+# $Id: cfg-ldap.txt,v 1.1 2006/11/21 18:10:03 paco Exp $
+#
+# There is four types of lines:
+# - Comments : lines that starts with "#"
+# - Blank lines : "\n" 
+# - variables : Lines in the form "variable = valor"
+# to define some parameters of the list
+# - PGP key information: Lines with the format
+#  keyid:email_address
+#  Used to define the users of the list, see below for
+#  examples
+#
+#
+# Directory wher the PGP keyring are stored
+pgpdir=/home/PATH/.gnupg
+# Where is the gpg command
+gpg=/usr/bin/gpg
+#  Where is the sendmail binary
+sendmail=/usr/sbin/sendmail
+# Log File
+logfile=./mail-example.log
+debug=1 
+# Use LDAP
+useldap=1
+ldapserver=ldap://ldap.server.es:port
+ldapbase=BASE_SERARCH
+ldapfilter=(irisUserEntitlement=*pgp*list=tecniris*)
+ldapattribute=irisUserEntitlement
+ldapseparator=:pgp:
+ldapfieldsep=;
+ldapkeyid=0
+ldapaddress=2
+ldaplistname=pruebas
+ldaplistpos=1
+
+replybasetemplate=./reply
+#
+# onlymember: Set to 1 to allow only post
+# from members (keyid listed in this file),
+# if not set everyone with access to the public
+# key of the list can post to it
+onlymember=1
+# Name of the list
+user=pruebas
+# Email address of the lists
+miaddr=pruebas@rediris.es
+#
+# Usuarios de la lista
+0xD3A42C61:francisco.monserrat@rediris.es

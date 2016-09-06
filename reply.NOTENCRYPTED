@@ -1,0 +1,17 @@
+From: #FROM
+To: #TO
+Subject: Reply to: #SUBJECT
+
+ This email is to inform you that  the message with subject
+"#SUBJECT" sent to the list #FROM could not be processed because
+is not encrypted to the list PGP KEY 
+
+
+ Try to send again the message encrypted with a PGP key of the
+list, if you need more information, visit http://url.
+
+
+regards
+
+list manager
+
